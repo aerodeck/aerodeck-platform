@@ -52,8 +52,7 @@
 <h3>Test</h3>
 <code>
 	$ node aerodeck
-
-		aerodeck API server listening on port 3000
+	// outputs aerodeck API server listening on port 3000
 
 	//In another terminal session and with the server running
 	$ curl -i -X GET http://localhost:3000/games
