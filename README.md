@@ -1,12 +1,14 @@
 <h1>aerodeck API Platform</h1>
 
 <h2>Routes</h2>
+<p><b>Games</b></p>
 <ul>
-	<p><b>Games</b></p>
 	<li>
 		GET /games
 	</li>
-	<p><b>Matches</b></p>
+</ul>
+<p><b>Matches</b></p>
+<ul>
 	<li>
 		POST /quadrow/matches
 	</li>
@@ -22,11 +24,15 @@
 	<li>
 		DELETE /quadrow/matches/:matchid
 	</li>
-	<p><b>Oauth</b></p>
+</ul>
+<p><b>Oauth</b></p>
+<ul>
 	<li>
 		POST /oauth/token
 	</li>
-	<p><b>Users</b></p>
+</ul>
+<p><b>Users</b></p>
+<ul>
 	<li>
 		POST /users
 	</li>
@@ -50,7 +56,6 @@
 	</li>
 </ul>
 <h3>Test</h3>
-
 <code>
 	$ node aerodeck 
 </code>
