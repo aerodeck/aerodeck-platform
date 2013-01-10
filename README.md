@@ -50,14 +50,13 @@
 	</li>
 </ul>
 <h3>Test</h3>
+<pre>
 <code>
 	$ node aerodeck
-	//outputs aerodeck API server listening on port 3000
-</code>
-<code>
-	//In another terminal session and with the server running
+
 	$ curl -i -X GET http://localhost:3000/games
 </code>
+</pre>
 <p>If it outputed 'GET /games' under 'aerodeck API server listening on port 3000', then it worked.</p>
 <h3>License</h3>
 <p>aerodeck Platform is licensed under the MIT license. See LICENSE.md to view.</p> 
