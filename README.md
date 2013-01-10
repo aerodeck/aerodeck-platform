@@ -55,7 +55,7 @@
 		DELETE /users/:userid
 	</li>
 </ul>
-<h3>Test</h3>
+<h2>Test</h2>
 <code>
 	$ node aerodeck 
 </code>
