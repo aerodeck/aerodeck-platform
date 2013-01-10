@@ -2,11 +2,11 @@
 
 <h2>Routes</h2>
 <ul>
-	<h4>Games</h4>
+	<p><b>Games</b></p>
 	<li>
 		GET /games
 	</li>
-	<h4>Matches</h4>
+	<p><b>Matches</b></p>
 	<li>
 		POST /quadrow/matches
 	</li>
@@ -22,11 +22,11 @@
 	<li>
 		DELETE /quadrow/matches/:matchid
 	</li>
-	<h4>Oauth</h4>
+	<p><b>Oauth</b></p>
 	<li>
 		POST /oauth/token
 	</li>
-	<h4>Users</h4>
+	<p><b>Users</b></p>
 	<li>
 		POST /users
 	</li>
@@ -52,8 +52,9 @@
 <h3>Test</h3>
 <code>
 	$ node aerodeck
-	// outputs aerodeck API server listening on port 3000
-
+	//outputs aerodeck API server listening on port 3000
+</code>
+<code>
 	//In another terminal session and with the server running
 	$ curl -i -X GET http://localhost:3000/games
 </code>
