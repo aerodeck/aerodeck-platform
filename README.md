@@ -56,6 +56,7 @@
 	</li>
 </ul>
 <h2>Test</h2>
+<p>Begin the API server locally with the following command.</p>
 <code>
 	$ node aerodeck 
 </code>
