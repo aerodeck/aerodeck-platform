@@ -69,4 +69,4 @@
 
 <p>If it outputed 'GET /games' under 'aerodeck API server listening on port 3000', then it worked.</p>
 <h2>License</h2>
-<p>aerodeck Platform is licensed under the MIT license. See LICENSE.md to view.</p> 
+<p>aerodeck Platform is licensed under the MIT license. See LICENSE to view.</p> 
