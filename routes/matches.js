@@ -1,3 +1,4 @@
+var game = require('../games');
 /*
  * POST a match.
  */
