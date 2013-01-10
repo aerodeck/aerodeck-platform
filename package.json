@@ -1,5 +1,5 @@
 {
-  "name": "aerodecksdk",
+  "name": "aerodeck-platform",
   "description": "TBD",
   "version": "0.0.1",
   "private": true,
@@ -11,11 +11,11 @@
     "start": "node app"
   },
   "dependencies": {
-    "express": "3.0.2",
+    "express": "3.x",
     "jade": "*",
     "mongodb": "1.2.x",
-    "bcrypt": "0.7.3",
-    "oauth": "0.9.8",
-    "socket.io": "0.9.13"
+    "bcrypt": "0.7.x",
+    "oauth": "0.9.x",
+    "socket.io": "0.9.x"
   }
 }
