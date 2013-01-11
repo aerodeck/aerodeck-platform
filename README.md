@@ -55,7 +55,8 @@
 		DELETE /users/:userid
 	</li>
 </ul>
-<h3>Test</h3>
+<h2>Test</h2>
+<p>Begin the API server locally with the following command.</p>
 <code>
 	$ node aerodeck 
 </code>
@@ -67,5 +68,5 @@
 </code>
 
 <p>If it outputed 'GET /games' under 'aerodeck API server listening on port 3000', then it worked.</p>
-<h3>License</h3>
-<p>aerodeck Platform is licensed under the MIT license. See LICENSE.md to view.</p> 
+<h2>License</h2>
+<p>aerodeck Platform is licensed under the MIT license. See LICENSE to view.</p> 
