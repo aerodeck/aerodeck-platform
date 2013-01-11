@@ -1,10 +1,5 @@
-
-/**
- * Module dependencies.
- */
-
+// Load modules
 var express = require('express')
-  , oauth = require('./routes/oauth')
   , users = require('./routes/users')
   , games = require('./routes/games')
   , matches = require('./routes/matches')
@@ -13,50 +8,70 @@ var express = require('express')
 
 var app = express();
 
-app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+app.configure(function() {
+  // Basic setup
+  app.set('port', process.env.PORT || 8000);
+
+  // Jade
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
+
+  // Nginx
+  app.enable('trust proxy');
+
+  // Middleware
+  app.use(express.compress());
   app.use(express.bodyParser());
-  app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function(){
+app.configure('development', function() {
   app.use(express.errorHandler());
+  app.use(express.logger('dev'));
 });
 
-/** 
-  oauth routing 
-**/
-app.post('/oauth/token', oauth.password);
+app.configure('production', function() {
+  app.use(express.logger());
+});
 
-/**
-  users routing
-**/
-app.get('/users', users.list);
-app.post('/users', users.new);
+var errorResponse = function(error) {
+  return function(req, res) { res.send(error); };
+}
+
+// Users collection
+app.post('/users', users.newUser);
+app.get('/users', users.listUsers);
+app.put('/users', errorResponse(405));
+app.delete('/users', errorResponse(405));
+
+// User document
+app.post('/users/:userid', errorResponse(405));
 app.get('/users/:userid', users.showUser);
 app.put('/users/:userid', users.updateUser);
 app.delete('/users/:userid', users.deleteUser);
+
+// User document actions
 app.post('/users/:userid/reset', users.passwordReset);
 app.post('/users/:userid/change', users.passwordChange);
 
-/**
-  games routing
-**/
-app.get('/games', games.list);
+// Games collection
+app.post('/games', errorResponse(405));
+app.get('/games', games.listGames);
+app.put('/games', errorResponse(405));
+app.delete('games', errorResponse(405));
 
-//quadrow routing
-app.post('/quadrow/matches', matches.quadrowNew); /**function with quadrow prefix because 
-functions for other games (i.e. towers_new) occupy file **/
-app.get('/quadrow/matches', matches.quadrowList);
-app.get('/quadrow/matches/:matchid', matches.showQuadrowMatch);
-app.put('/quadrow/matches/:matchid', matches.updateQuadrowMatch);
-app.delete('/quadrow/matches/:matchid', matches.deleteQuadrowMatch);
+// Matches collection
+app.post('/:game/matches', matches.newMatch);
+app.get('/:game/matches', matches.listMatches);
+app.put('/:game/matches', errorResponse(405));
+app.delete('/:game/matches', errorResponse(405));
+
+// Match document
+app.post('/:game/matches', errorResponse(405));
+app.get('/:game/matches/:matchid', matches.showMatch);
+app.put('/:game/matches/:matchid', matches.updateMatch);
+app.delete('/:game/matches/:matchid', matches.deleteMatch);
 
 
 http.createServer(app).listen(app.get('port'), function(){
