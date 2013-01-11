@@ -29,7 +29,7 @@
 Begin the API server locally with the following command:
 
 ``` sh
-node aerodeck 
+npm start
 ```
 
 With the server running, give this a try:
