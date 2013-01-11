@@ -1,6 +1,5 @@
-/*
- * GET games list.
- */
-exports.list = function(req, res){
-	console.log('GET /games');
+var games = require('../games');
+
+exports.listGames = function(req, res) {
+  console.log('GET /games');
 };

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var game = require('../games');
 /*
  * POST a match.
@@ -5,33 +6,26 @@ var game = require('../games');
 exports.quadrowNew = function(req, res){
 	console.log('POST /quadrow/matches');
 };
+=======
+var games = require('../games');
+>>>>>>> ddc03f799689fb80574df250aac17b3a85a01c8f
 
-/*
- * GET matches of current user.
- */
-exports.quadrowList = function(req, res){
-	console.log('GET /quadrow/matches');
+exports.newMatch = function(req, res) {
+  console.log('POST /:match/matches');
 };
 
-/*
- * GET a match.
- */
-exports.showQuadrowMatch = function(req, res){
- 	console.log('GET /quadrow/matches/:matchid')
+exports.listMatches = function(req, res) {
+  console.log('GET /:match/matches');
 };
 
-/*
- * UPDATE a match.
- */
-exports.updateQuadrowMatch = function(req, res){
- 	console.log('PUT /quadrow/matches/:matchid')
+exports.showMatch = function(req, res) {
+  console.log('GET /:match/matches/:matchid');
 };
 
-/*
- * DELETE a match.
- */
-exports.deleteQuadrowMatch = function(req, res){
- 	console.log('DELETE /quadrow/matches/:matchid')
+exports.updateMatch = function(req, res) {
+  console.log('PUT /:match/matches/:matchid');
 };
 
-
+exports.deleteMatch = function(req, res) {
+  console.log('DELETE /:match/matches/:matchid');
+};
