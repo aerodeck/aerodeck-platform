@@ -1,14 +1,12 @@
-<<<<<<< HEAD
-var game = require('../games');
+
+var games = require('../games');
 /*
  * POST a match.
  */
 exports.quadrowNew = function(req, res){
 	console.log('POST /quadrow/matches');
 };
-=======
-var games = require('../games');
->>>>>>> ddc03f799689fb80574df250aac17b3a85a01c8f
+
 
 exports.newMatch = function(req, res) {
   console.log('POST /:match/matches');
