@@ -1,3 +1,7 @@
+require( '../db' );
+var mongoose = require('mongoose');
+var user     = mongoose.model( 'user' );
+
 exports.newUser = function(req, res) {
   console.log('POST /users');
 };

@@ -40,4 +40,3 @@ var matchSchema = new Schema({
 
 var user = db.model('user', userSchema);
 var match = db.model('match', matchSchema);
-

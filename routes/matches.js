@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 var games = require('../games');
 /*
@@ -25,9 +24,6 @@ exports.updateMatch = function(req, res) {
   console.log('PUT /:match/matches/:matchid');
 };
 
-=======
-var games = require('../games');
-
 exports.newMatch = function(req, res) {
   console.log('POST /:match/matches');
 };
@@ -44,7 +40,6 @@ exports.updateMatch = function(req, res) {
   console.log('PUT /:match/matches/:matchid');
 };
 
->>>>>>> ddc03f799689fb80574df250aac17b3a85a01c8f
 exports.deleteMatch = function(req, res) {
   console.log('DELETE /:match/matches/:matchid');
 };
