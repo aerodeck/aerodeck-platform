@@ -12,7 +12,7 @@ exports.listGames = function(req, res) {
   console.log(arraySize)
   for(i=0; i<arraySize; i++){
   	console.log(games[i].name); //test
-  	return games[i].name; //real life usage
+  	return res.send(games[i].name); //real life usage
   }
   
   console.log('GET /games');
