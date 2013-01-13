@@ -1,23 +1,14 @@
-<<<<<<< HEAD
 require( '../db' );
 var mongoose = require('mongoose');
 var user     = mongoose.model( 'user' );
 var bcrypt = require('bcrypt');
 var date = new Date();
 /*
- * GET users list.
- */
-
-exports.list = function(req, res){
-  console.log('GET /users');
-};
-
-/*
  * POST new user.
  */
-exports.new = function(req, res){
 
-
+exports.newUser = function(req, res) {
+ 
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var seconds = date.getSeconds();
@@ -51,16 +42,17 @@ exports.new = function(req, res){
     updated: null
   }).save()
   
+
+
   console.log('POST /users');
-  console.log('POST /users');
-=======
+};
 exports.newUser = function(req, res) {
   console.log('POST /users');
 };
 
 exports.listUsers = function(req, res) {
   console.log('GET /users');
->>>>>>> ddc03f799689fb80574df250aac17b3a85a01c8f
+
 };
 
 exports.showUser = function(req, res) {
