@@ -46,9 +46,6 @@ exports.newUser = function(req, res) {
 
   console.log('POST /users');
 };
-exports.newUser = function(req, res) {
-  console.log('POST /users');
-};
 
 exports.listUsers = function(req, res) {
   console.log('GET /users');
