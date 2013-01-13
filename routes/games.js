@@ -11,8 +11,8 @@ exports.listGames = function(req, res) {
   arraySize = Array.size(games);
   for(i=0; i<arraySize; i++){
   	console.log(games[i].name); //test
-  	res.send(games[i].name); //real life usage
   }
-  
+  gamesJSON = JSON.stringify(games)
+  res.send(gamesJSON);
   console.log('GET /games');
 };

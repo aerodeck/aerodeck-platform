@@ -57,6 +57,7 @@ exports.newUser = function(req, res) {
           updated: null
         }).save()
         res.send('User: '+ username +' Saved...');
+        console.log('User Saved in Databased')
       });
     }
   });
