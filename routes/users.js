@@ -29,6 +29,7 @@ exports.newUser = function(req, res) {
   
 
   user.findOne({username: username}, function(err, userExists){
+  	var user = this;
     if(userExists){
       res.send('User Exists')
 
@@ -41,7 +42,7 @@ exports.newUser = function(req, res) {
             if (err){
               console.log(err);
             }else{
-              this.passwordHash = hash;
+              user.passwordHash = hash;
             }
 
           });
@@ -50,14 +51,14 @@ exports.newUser = function(req, res) {
           fullName: full_name,
           username: username,
           email: email,
-          password: this.passwordHash,
+          password: user.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
           created: date,
           updated: null
         }).save()
         res.send('User: '+ username +' Saved...');
-        console.log('User Saved in Databased')
+        console.log('User Saved in Database')
       });
     }
   });
