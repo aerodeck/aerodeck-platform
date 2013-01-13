@@ -13,6 +13,6 @@ exports.listGames = function(req, res) {
   	console.log(games[i].name); //test
   }
   gamesJSON = JSON.stringify(games)
-  res.send(gamesJSON);
+  res.send('{ "games" : ' + gamesJSON + '}');
   console.log('GET /games');
 };
