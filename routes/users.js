@@ -3,10 +3,10 @@ var mongoose = require('mongoose');
 var user     = mongoose.model( 'user' );
 var bcrypt = require('bcrypt');
 var date = new Date();
+
 /*
  * POST new user.
  */
-
 exports.newUser = function(req, res) {
  
   var hours = date.getHours();
@@ -20,27 +20,47 @@ exports.newUser = function(req, res) {
   var time = month + '/' + day + '/' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
   
   //requested bodies
-  full_name = req.body.user.full_name;
-  username = req.body.user.username;
-  email = req.body.user.email;
-  password = req.body.user.password;
-  apnToken = req.body.user.apn;
-  gcmToken = req.body.user.gcm;
+  full_name = req.body.full_name;
+  username = req.body.username;
+  email = req.body.email;
+  password = req.body.password;
+  apnToken = req.body.apn;
+  gcmToken = req.body.gcm;
+  
 
-  //password hashing
-  var salt = bcrypt.genSaltSync(10);
-  var hash = bcrypt.hashSync(password, salt);
+  user.findOne({username: username}, function(err, userExists){
+    if(userExists){
+      res.send('User Exists')
 
-  newUser = user({
-    fullName: full_name,
-    username: username,
-    email: email,
-    password: hash,
-    apn: apnToken,
-    gcm: gcmToken,
-    created: date,
-    updated: null
-  }).save()
+    }else{
+      bcrypt.genSalt(10, function(err, salt) {
+        if (err){
+          return err;
+        }else{
+          bcrypt.hash(password, salt, function(err, hash) {
+            if (err){
+              console.log(err);
+            }else{
+              this.passwordHash = hash;
+            }
+
+          });
+        }
+        newUser = user({
+          fullName: full_name,
+          username: username,
+          email: email,
+          password: this.passwordHash,
+          apn: apnToken,
+          gcm: gcmToken,
+          created: date,
+          updated: null
+        }).save()
+        res.send('User: '+ username +' Saved...');
+      });
+    }
+  });
+  
   
 
 
