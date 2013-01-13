@@ -29,9 +29,9 @@ exports.newUser = function(req, res) {
   
 
   user.findOne({username: username}, function(err, userExists){
-  	var user = this;
+  	var users = this;
     if(userExists){
-      res.send('User Exists')
+      console.log('User Exists');
 
     }else{
       bcrypt.genSalt(10, function(err, salt) {
@@ -42,7 +42,7 @@ exports.newUser = function(req, res) {
             if (err){
               console.log(err);
             }else{
-              user.passwordHash = hash;
+              users.passwordHash = hash;
             }
 
           });
@@ -51,25 +51,29 @@ exports.newUser = function(req, res) {
           fullName: full_name,
           username: username,
           email: email,
-          password: user.passwordHash,
+          password: users.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
           created: time,
           updated: null
         }).save()
-        res.send('User: '+ username +' Saved...');
-        console.log('User Saved in Database')
+        console.log('User: '+ username + ', Saved in Database')
       });
     }
   });
-  
-  
-
 
   console.log('POST /users');
 };
 
 exports.listUsers = function(req, res) {
+  user.find({}, function(err, user){
+  	if (user){
+  		userJSON = JSON.stringify(user)
+  	  	res.send(userJSON);
+  	}else{
+  		res.send('No users found in database\n');
+  	}
+  });
   console.log('GET /users');
 
 };
