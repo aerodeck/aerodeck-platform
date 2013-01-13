@@ -69,7 +69,7 @@ exports.listUsers = function(req, res) {
   user.find({}, function(err, user){
   	if (user){
   		userJSON = JSON.stringify(user)
-  	  	res.send(userJSON);
+  	  	res.send('{' + userJSON + '}');
   	}else{
   		res.send('No users found in database\n');
   	}
