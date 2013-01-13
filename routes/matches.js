@@ -1,36 +1,21 @@
-/*
- * POST a match.
- */
-exports.quadrowNew = function(req, res){
-	console.log('POST /quadrow/matches');
+var games = require('../games');
+
+exports.newMatch = function(req, res) {
+  console.log('POST /:match/matches');
 };
 
-/*
- * GET matches of current user.
- */
-exports.quadrowList = function(req, res){
-	console.log('GET /quadrow/matches');
+exports.listMatches = function(req, res) {
+  console.log('GET /:match/matches');
 };
 
-/*
- * GET a match.
- */
-exports.showQuadrowMatch = function(req, res){
- 	console.log('GET /quadrow/matches/:matchid')
+exports.showMatch = function(req, res) {
+  console.log('GET /:match/matches/:matchid');
 };
 
-/*
- * UPDATE a match.
- */
-exports.updateQuadrowMatch = function(req, res){
- 	console.log('PUT /quadrow/matches/:matchid')
+exports.updateMatch = function(req, res) {
+  console.log('PUT /:match/matches/:matchid');
 };
 
-/*
- * DELETE a match.
- */
-exports.deleteQuadrowMatch = function(req, res){
- 	console.log('DELETE /quadrow/matches/:matchid')
+exports.deleteMatch = function(req, res) {
+  console.log('DELETE /:match/matches/:matchid');
 };
-
-
