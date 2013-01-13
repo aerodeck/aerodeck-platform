@@ -54,7 +54,7 @@ exports.newUser = function(req, res) {
           password: user.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
-          created: date,
+          created: time,
           updated: null
         }).save()
         res.send('User: '+ username +' Saved...');
