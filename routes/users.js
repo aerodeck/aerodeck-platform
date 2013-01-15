@@ -8,7 +8,7 @@ var date = new Date();
  * POST new user.
  */
 exports.newUser = function(req, res) {
- 
+
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var seconds = date.getSeconds();
@@ -29,7 +29,7 @@ exports.newUser = function(req, res) {
   
 
   user.findOne({username: username}, function(err, userExists){
-  	var users = this;
+    var users = this;
     if(userExists){
       console.log('User Exists');
 
@@ -66,34 +66,45 @@ exports.newUser = function(req, res) {
 };
 
 exports.listUsers = function(req, res) {
-  user.find({}, function(err, user){
-  	if (user){
-  		userJSON = JSON.stringify(user)
-  	  	res.send('{' + userJSON + '}');
-  	}else{
-  		res.send('No users found in database\n');
-  	}
-  });
-  console.log('GET /users');
-
+  var q = req.query.username;
+  if(typeof q == 'undefined'){
+  	  user.find({}, function(err, user){
+      if (user){
+        userJSON = JSON.stringify(user)
+        res.send('{' + userJSON + '}');
+      }else{
+        res.send('No users found in database\n');
+      }
+  	});
+  	console.log('GET /users');
+  }else{
+    user.findOne({username: q}, function(err, user){
+    	if(user){
+    	  console.log('user found');
+    	  res.send(user)
+    	}else{
+    	  console.log(err);
+    	}
+    })
+  }
 };
 
 exports.showUser = function(req, res) {
   console.log('GET /users/:userid');
 };
-
+  
 exports.updateUser = function(req, res) {
   console.log('PUT /users/:userid');
 };
-
+  
 exports.deleteUser = function(req, res) {
   console.log('DELETE /users/:userid');
-};
-
+}; 
+  
 exports.passwordReset = function(req, res) {
   console.log('POST /users/:userid/reset');
 };
-
+  
 exports.passwordChange = function(req, res) {
   console.log('POST /users/:userid/change');
 };
