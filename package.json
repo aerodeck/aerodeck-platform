@@ -12,11 +12,8 @@
   },
   "dependencies": {
     "express": "3.x",
-    "jade": "*",
-    "mongodb": "1.2.x",
     "mongoose": "3.5.x",
     "bcrypt": "0.7.x",
-    "oauth": "0.9.x",
     "socket.io": "0.9.x"
   }
 }

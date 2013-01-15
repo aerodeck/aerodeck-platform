@@ -10,11 +10,7 @@ var app = express();
 
 app.configure(function() {
   // Basic setup
-  app.set('port', process.env.PORT || 8000);
-
-  // Jade
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
+  app.set('port', 8000);
 
   // Nginx
   app.enable('trust proxy');
@@ -23,7 +19,6 @@ app.configure(function() {
   app.use(express.compress());
   app.use(express.bodyParser());
   app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function() {
@@ -75,5 +70,5 @@ app.delete('/:game/matches/:matchid', matches.deleteMatch);
 
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("aerodeck API server listening on port " + app.get('port'));
+  console.log("Aerodeck API server listening on port " + app.get('port'));
 });
