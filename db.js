@@ -22,7 +22,7 @@ var userSchema = new Schema({
   username: String,
   email: String,
   password: String,
-  apn: {type:[String]},
+  apns: {type:[String]},
   gcm: {type:[String]},
   created: String,
   updated: String
