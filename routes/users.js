@@ -8,7 +8,7 @@ var date = new Date();
  * POST new user.
  */
 exports.newUser = function(req, res) {
- 
+
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var seconds = date.getSeconds();
@@ -29,18 +29,19 @@ exports.newUser = function(req, res) {
   
 
   user.findOne({username: username}, function(err, userExists){
-  	var users = this;
+    if (err) res.send(err);
+    var users = this;
     if(userExists){
       console.log('User Exists');
 
     }else{
       bcrypt.genSalt(10, function(err, salt) {
         if (err){
-          return err;
+          res.send(err)
         }else{
           bcrypt.hash(password, salt, function(err, hash) {
             if (err){
-              console.log(err);
+              res.send(err)
             }else{
               users.passwordHash = hash;
             }
@@ -54,8 +55,8 @@ exports.newUser = function(req, res) {
           password: users.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
-          created: time,
-          updated: null
+          created: {type: Date, default: Date.now},
+          updated: {type: Date, default: Date.now}
         }).save()
         console.log('User: '+ username + ', Saved in Database')
       });
@@ -66,34 +67,49 @@ exports.newUser = function(req, res) {
 };
 
 exports.listUsers = function(req, res) {
-  user.find({}, function(err, user){
-  	if (user){
-  		userJSON = JSON.stringify(user)
-  	  	res.send('{' + userJSON + '}');
-  	}else{
-  		res.send('No users found in database\n');
-  	}
-  });
-  console.log('GET /users');
-
-};
-
-exports.showUser = function(req, res) {
-  console.log('GET /users/:userid');
+  var q = req.query.username;
+  
+  if(typeof q == 'undefined'){
+  	user.find({}, function(err, user){
+      if (err) res.send(err);
+      if (user){
+        userJSON = JSON.stringify(user)
+        res.send('{' + userJSON + '}');
+      }else{
+        res.send('No users found in database\n');
+      }
+  	});
+  	
+  }else{
+    user.findOne({username: q}, function(err, user){
+      if (err) res.send(err);
+    	if(user){
+    	  res.send(user)
+    	}else{
+    	  res.send(JSON.stringify('Query field invalid.'));
+    	}
+    })
+  }
+  console.log('GET /users')
 };
 
 exports.updateUser = function(req, res) {
+  var userid = req.params.userid;
+  user.findOne({_id: userid}, function(err, user){
+    if(err) res.send(err);
+    res.send(userid);
+  })
   console.log('PUT /users/:userid');
 };
-
+  
 exports.deleteUser = function(req, res) {
   console.log('DELETE /users/:userid');
-};
-
+}; 
+  
 exports.passwordReset = function(req, res) {
   console.log('POST /users/:userid/reset');
 };
-
+  
 exports.passwordChange = function(req, res) {
   console.log('POST /users/:userid/change');
 };
