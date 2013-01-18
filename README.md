@@ -1,4 +1,4 @@
-# aerodeck API Platform
+# Aerodeck API Platform
 
 ## Routes
 
