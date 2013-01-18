@@ -55,8 +55,8 @@ exports.newUser = function(req, res) {
           password: users.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
-          created: date,
-          updated: date
+          created: {type: Date, default: Date.now},
+          updated: {type: Date, default: Date.now}
         }).save()
         console.log('User: '+ username + ', Saved in Database')
       });
