@@ -29,6 +29,7 @@ exports.newUser = function(req, res) {
   
 
   user.findOne({username: username}, function(err, userExists){
+    if (err) return handleError(err);
     var users = this;
     if(userExists){
       console.log('User Exists');
@@ -54,8 +55,8 @@ exports.newUser = function(req, res) {
           password: users.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
-          created: time,
-          updated: null
+          created: date,
+          updated: date
         }).save()
         console.log('User: '+ username + ', Saved in Database')
       });
@@ -67,8 +68,10 @@ exports.newUser = function(req, res) {
 
 exports.listUsers = function(req, res) {
   var q = req.query.username;
+  
   if(typeof q == 'undefined'){
-  	  user.find({}, function(err, user){
+  	user.find({}, function(err, user){
+      if (err) return handleError(err);
       if (user){
         userJSON = JSON.stringify(user)
         res.send('{' + userJSON + '}');
@@ -79,21 +82,24 @@ exports.listUsers = function(req, res) {
   	console.log('GET /users');
   }else{
     user.findOne({username: q}, function(err, user){
+      if (err) return handleError(err);
     	if(user){
     	  console.log('user found');
+        console.log('GET /users')
     	  res.send(user)
     	}else{
-    	  console.log(err);
+    	  console.log('Query field invalid.');
     	}
     })
   }
 };
 
-exports.showUser = function(req, res) {
-  console.log('GET /users/:userid');
-};
-  
+
 exports.updateUser = function(req, res) {
+  var userid = req.params.userid;
+  user.findOne({_id: userid}, function(err, user){
+
+  })
   console.log('PUT /users/:userid');
 };
   
