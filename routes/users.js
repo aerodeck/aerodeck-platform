@@ -29,7 +29,7 @@ exports.newUser = function(req, res) {
   
 
   user.findOne({username: username}, function(err, userExists){
-    if (err) return handleError(err);
+    if (err) res.send(err);
     var users = this;
     if(userExists){
       console.log('User Exists');
@@ -37,11 +37,11 @@ exports.newUser = function(req, res) {
     }else{
       bcrypt.genSalt(10, function(err, salt) {
         if (err){
-          return err;
+          res.send(err)
         }else{
           bcrypt.hash(password, salt, function(err, hash) {
             if (err){
-              console.log(err);
+              res.send(err)
             }else{
               users.passwordHash = hash;
             }
@@ -71,7 +71,7 @@ exports.listUsers = function(req, res) {
   
   if(typeof q == 'undefined'){
   	user.find({}, function(err, user){
-      if (err) return handleError(err);
+      if (err) res.send(err);
       if (user){
         userJSON = JSON.stringify(user)
         res.send('{' + userJSON + '}');
@@ -79,26 +79,25 @@ exports.listUsers = function(req, res) {
         res.send('No users found in database\n');
       }
   	});
-  	console.log('GET /users');
+  	
   }else{
     user.findOne({username: q}, function(err, user){
-      if (err) return handleError(err);
+      if (err) res.send(err);
     	if(user){
-    	  console.log('user found');
-        console.log('GET /users')
     	  res.send(user)
     	}else{
-    	  console.log('Query field invalid.');
+    	  res.send(JSON.stringify('Query field invalid.'));
     	}
     })
   }
+  console.log('GET /users')
 };
-
 
 exports.updateUser = function(req, res) {
   var userid = req.params.userid;
   user.findOne({_id: userid}, function(err, user){
-
+    if(err) res.send(err);
+    res.send(userid);
   })
   console.log('PUT /users/:userid');
 };
