@@ -1,4 +1,4 @@
-# aerodeck API Platform
+# Aerodeck API Platform
 
 ## Routes
 
@@ -20,7 +20,6 @@
 - POST /users/:userid/reset
 - POST /users/:userid/change
 - GET /users
-- GET /users/:userid
 - PUT /users/:userid
 - DELETE /users/:userid
 
