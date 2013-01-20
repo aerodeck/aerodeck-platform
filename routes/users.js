@@ -94,14 +94,34 @@ exports.listUsers = function(req, res) {
 };
 
 exports.updateUser = function(req, res) {
+  /*
   var userid = req.params.userid;
   user.findOne({_id: userid}, function(err, user){
     if(err) res.send(err);
     res.send(userid);
   })
+ */
   console.log('PUT /users/:userid');
 };
-  
+exports.showUser = function(req, res) {
+  userid = req.params.userid;
+  user.findOne({_id: userid}, function(err, users){
+    if(err) res.send(err);
+    if(users){
+      /*
+      responds with
+        - full name
+        - username
+        - created
+        - updated
+      */
+      res.send('{\n' + '"fullName":"'+ users.fullName + '"' + ',\n' + '"username":"'+ users.username + '"' + ',\n' + '"created":"'+ users.created + '"' + ',\n' + '"updated":"'+ users.updated + '"' +'\n}') //modif
+    }else{
+      res.send(JSON.stringify('User not found'))
+    }
+  });
+  console.log('GET /users/:userid');
+};
 exports.deleteUser = function(req, res) {
   console.log('DELETE /users/:userid');
 }; 
