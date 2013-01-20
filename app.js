@@ -42,7 +42,7 @@ app.delete('/users', errorResponse(405));
 
 // User document
 app.post('/users/:userid', errorResponse(405));
-//app.get('/users/:userid', users.showUser); *method deleted*
+app.get('/users/:userid', users.showUser);
 app.put('/users/:userid', users.updateUser);
 app.delete('/users/:userid', users.deleteUser);
 
