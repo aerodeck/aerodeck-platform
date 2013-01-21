@@ -67,6 +67,7 @@ exports.newUser = function(req, res) {
 };
 
 exports.listUsers = function(req, res) {
+
   var q = req.query.username;
   
   if(typeof q == 'undefined'){
@@ -74,7 +75,7 @@ exports.listUsers = function(req, res) {
       if (err) res.send(err);
       if (user){
         userJSON = JSON.stringify(user)
-        res.send('{' + userJSON + '}');
+        res.send(userJSON);
       }else{
         res.send('No users found in database\n');
       }
