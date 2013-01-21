@@ -32,8 +32,8 @@ exports.newUser = function(req, res) {
     if (err) res.send(err);
     var users = this;
     if(userExists){
+      res.send(JSON.stringify('User already exists'));
       console.log('User Exists');
-
     }else{
       bcrypt.genSalt(10, function(err, salt) {
         if (err){
