@@ -20,7 +20,7 @@ exports.newUser = function(req, res) {
   var time = month + '/' + day + '/' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
   
   //requested bodies
-  full_name = req.body.full_name;
+  fullName = req.body.fullName;
   username = req.body.username;
   email = req.body.email;
   password = req.body.password;
@@ -49,16 +49,17 @@ exports.newUser = function(req, res) {
           });
         }
         newUser = user({
-          fullName: full_name,
+          fullName: fullName,
           username: username,
           email: email,
           password: users.passwordHash,
           apn: apnToken,
           gcm: gcmToken,
-          created: {type: Date, default: Date.now},
-          updated: {type: Date, default: Date.now}
+          created: date, //{type: Date, default: Date.now},
+          updated: date //{type: Date, default: Date.now}
         }).save()
         console.log('User: '+ username + ', Saved in Database')
+        res.send(JSON.stringify('User created'));
       });
     }
   });
