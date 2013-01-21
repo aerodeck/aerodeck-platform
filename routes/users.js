@@ -1,6 +1,7 @@
 require( '../db' );
 var mongoose = require('mongoose');
 var user     = mongoose.model( 'user' );
+var email_regex = require('../email_regex');
 var bcrypt = require('bcrypt');
 var date = new Date();
 
@@ -48,18 +49,33 @@ exports.newUser = function(req, res) {
 
           });
         }
-        newUser = user({
-          fullName: fullName,
-          username: username,
-          email: email,
-          password: users.passwordHash,
-          apn: apnToken,
-          gcm: gcmToken,
-          created: date, //{type: Date, default: Date.now},
-          updated: date //{type: Date, default: Date.now}
-        }).save()
-        console.log('User: '+ username + ', Saved in Database')
-        res.send(JSON.stringify('User created'));
+
+        if(email_regex.isRFC822ValidEmail(email)){
+          user.findOne({email: email}, function(err, email){
+            if (email) {
+              res.send(JSON.stringify('Email already exists'));
+              console.log('Email already exists');
+            }else{
+              newUser = user({
+                fullName: fullName,
+                username: username,
+                email: email,
+                password: users.passwordHash,
+                apn: apnToken,
+                gcm: gcmToken,
+                created: date, //{type: Date, default: Date.now},
+                updated: date //{type: Date, default: Date.now}
+              }).save()
+              console.log('User: '+ username + ', Saved in Database')
+              res.send(JSON.stringify('User created'));
+            }
+          })
+          
+        }else{
+          res.send(JSON.stringify('Invalid email'));
+          console.log('Invalid email');
+        }
+        
       });
     }
   });
