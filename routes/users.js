@@ -31,7 +31,6 @@ exports.newUser = function(req, res) {
 
   user.findOne({username: username}, function(err, userExists){
     if (err) res.send(err);
-    var users = this;
     if(userExists){
       res.send(JSON.stringify('User already exists'));
       console.log('User Exists');
@@ -44,37 +43,36 @@ exports.newUser = function(req, res) {
             if (err){
               res.send(err)
             }else{
-              users.passwordHash = hash;
+
+              if(email_regex.isRFC822ValidEmail(email)){
+                user.findOne({email: email}, function(err, email){
+                  if (email) {
+                    res.send(JSON.stringify('Email already exists'));
+                    console.log('Email already exists');
+                  }else{
+                    newUser = user({
+                      fullName: fullName,
+                      username: username,
+                      email: email,
+                      password: hash,
+                      apn: apnToken,
+                      gcm: gcmToken,
+                      created: date, //{type: Date, default: Date.now},
+                      updated: date //{type: Date, default: Date.now}
+                    }).save()
+                    console.log('User: '+ username + ' Pass: ' + hash + '\nSaved in Database')
+                    res.send(JSON.stringify('User created'));
+                  }
+                })
+              }else{
+                res.send(JSON.stringify('Invalid email'));
+                console.log('Invalid email');
+              }
             }
 
           });
         }
 
-        if(email_regex.isRFC822ValidEmail(email)){
-          user.findOne({email: email}, function(err, email){
-            if (email) {
-              res.send(JSON.stringify('Email already exists'));
-              console.log('Email already exists');
-            }else{
-              newUser = user({
-                fullName: fullName,
-                username: username,
-                email: email,
-                password: users.passwordHash,
-                apn: apnToken,
-                gcm: gcmToken,
-                created: date, //{type: Date, default: Date.now},
-                updated: date //{type: Date, default: Date.now}
-              }).save()
-              console.log('User: '+ username + ', Saved in Database')
-              res.send(JSON.stringify('User created'));
-            }
-          })
-          
-        }else{
-          res.send(JSON.stringify('Invalid email'));
-          console.log('Invalid email');
-        }
         
       });
     }
