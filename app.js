@@ -1,30 +1,14 @@
-// Load modules
-var express = require('express')
-  , users = require('./routes/users')
-  , games = require('./routes/games')
-  , matches = require('./routes/matches')
-  , http = require('http')
-  , path = require('path');
+var express = require('express'),
+    http = require('http'),
+    users = require('./routes/users'),
+    games = require('./routes/games'),
+    matches = require('./routes/matches');
 
 var app = express();
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-    
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    } else {
-      next();
-    }
-};
 
 app.configure(function() {
-  app.use(allowCrossDomain)
   // Basic setup
   app.set('port', 8000);
-
-  // Nginx
   app.enable('trust proxy');
 
   // Middleware
@@ -34,7 +18,6 @@ app.configure(function() {
 });
 
 app.configure('development', function() {
-  app.use(express.errorHandler());
   app.use(express.logger('dev'));
 });
 
@@ -47,16 +30,17 @@ var errorResponse = function(error) {
 }
 
 // Users collection
-app.post('/users', users.newUser);
-app.get('/users', users.listUsers);
+app.post('/users', users.create);
+app.get('/users', users.list);
 app.put('/users', errorResponse(405));
 app.delete('/users', errorResponse(405));
 
 // User document
+app.param('userid', users.paramHandler);
 app.post('/users/:userid', errorResponse(405));
-app.get('/users/:userid', users.showUser);
-app.put('/users/:userid', users.updateUser);
-app.delete('/users/:userid', users.deleteUser);
+app.get('/users/:userid', users.show);
+app.put('/users/:userid', users.update);
+app.delete('/users/:userid', users.delete);
 
 // User document actions
 app.post('/users/:userid/reset', users.passwordReset);
@@ -64,23 +48,24 @@ app.post('/users/:userid/change', users.passwordChange);
 
 // Games collection
 app.post('/games', errorResponse(405));
-app.get('/games', games.listGames);
+app.get('/games', games.list);
 app.put('/games', errorResponse(405));
 app.delete('games', errorResponse(405));
 
 // Matches collection
-app.post('/:game/matches', matches.newMatch);
-app.get('/:game/matches', matches.listMatches);
+app.param('game', games.paramHandler);
+app.post('/:game/matches', matches.create);
+app.get('/:game/matches', matches.list);
 app.put('/:game/matches', errorResponse(405));
 app.delete('/:game/matches', errorResponse(405));
 
 // Match document
+app.param('matchid', matches.paramHandler);
 app.post('/:game/matches', errorResponse(405));
-app.get('/:game/matches/:matchid', matches.showMatch);
-app.put('/:game/matches/:matchid', matches.updateMatch);
-app.delete('/:game/matches/:matchid', matches.deleteMatch);
+app.get('/:game/matches/:matchid', matches.show);
+app.put('/:game/matches/:matchid', matches.update);
+app.delete('/:game/matches/:matchid', matches.delete);
 
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Aerodeck API server listening on port " + app.get('port'));
+http.createServer(app).listen(app.get('port'), function() {
+  console.log("Aerodeck application server listening on port " + app.get('port'));
 });

@@ -1,18 +1,17 @@
 var games = require('../games');
 
-exports.listGames = function(req, res) {
-  Array.size = function(object) {
-    var size = 0, key;
-    for (key in object) {
-        if (object.hasOwnProperty(key)) size++;
+exports.paramHandler = function(req, res, next, value) {
+  for(var i = 0; i < games.length; i++) {
+    if (games[i].id == value) {
+      req.game = games[i];
+      next();
+      return;
     }
-    return size;
-  };
-  arraySize = Array.size(games);
-  for(i=0; i<arraySize; i++){
-  	console.log(games[i].name); //test
   }
-  gamesJSON = JSON.stringify(games)
-  res.send('{ "games" : ' + gamesJSON + '}');
-  console.log('GET /games');
+
+  res.send(404);
+}
+
+exports.list = function(req, res) {
+  res.send(JSON.stringify({ games: games }));
 };

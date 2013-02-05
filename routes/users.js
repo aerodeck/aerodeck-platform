@@ -1,151 +1,86 @@
-require( '../db' );
-var mongoose = require('mongoose');
-var user     = mongoose.model( 'user' );
-var email_regex = require('../email_regex');
-var bcrypt = require('bcrypt');
-var date = new Date();
+var mongoose = require('mongoose'),
+    User = require('../models/user'),
+    bcrypt = require('bcrypt');
 
-/*
- * POST new user.
- */
-exports.newUser = function(req, res) {
+mongoose.connect("mongodb://localhost:27017/aerodeck");
 
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
-  //date
-  var month = date.getMonth() + 1;
-  var year = date.getFullYear();
-  var day = date.getDate();
-  //Make it look nice (Official format TBD)
-  var time = month + '/' + day + '/' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
-  
-  //requested bodies
-  fullName = req.body.fullName;
-  username = req.body.username;
-  email = req.body.email;
-  password = req.body.password;
-  apnToken = req.body.apn;
-  gcmToken = req.body.gcm;
-  
-
-  user.findOne({username: username}, function(err, userExists){
-    if (err) res.send(err);
-    if(userExists){
-      res.send(JSON.stringify('User already exists'));
-      console.log('User Exists');
-    }else{
-      bcrypt.genSalt(10, function(err, salt) {
-        if (err){
-          res.send(err)
-        }else{
-          bcrypt.hash(password, salt, function(err, hash) {
-            if (err){
-              res.send(err)
-            }else{
-
-              if(email_regex.isRFC822ValidEmail(email)){
-                user.findOne({email: email}, function(err, email){
-                  if (email) {
-                    res.send(JSON.stringify('Email already exists'));
-                    console.log('Email already exists');
-                  }else{
-                    newUser = user({
-                      fullName: fullName,
-                      username: username,
-                      email: email,
-                      password: hash,
-                      apn: apnToken,
-                      gcm: gcmToken,
-                      created: date, //{type: Date, default: Date.now},
-                      updated: date //{type: Date, default: Date.now}
-                    }).save()
-                    console.log('User: '+ username + ' Pass: ' + hash + '\nSaved in Database')
-                    res.send(JSON.stringify('User created'));
-                  }
-                })
-              }else{
-                res.send(JSON.stringify('Invalid email'));
-                console.log('Invalid email');
-              }
-            }
-
-          });
-        }
-
-        
-      });
+exports.paramHandler = function(req, res, next, value) {
+  User.findById(value, function(err, user) {
+    if (err) {
+      next(err);
+    } else if (user) {
+      req.user = user;
+      next();
+    } else {
+      res.send(404);
     }
   });
+}
 
-  console.log('POST /users');
-};
+exports.create = function(req, res, next) {
 
-exports.listUsers = function(req, res) {
+  // TODO: Verify password before hashing!
 
-  var q = req.query.username;
-  
-  if(typeof q == 'undefined'){
-  	user.find({}, function(err, user){
-      if (err) res.send(err);
-      if (user){
-        userJSON = JSON.stringify(user)
-        res.send(userJSON);
-      }else{
-        res.send('No users found in database\n');
+  bcrypt.hash(req.body.password, 10, function(err, hash) {
+    if (err) {
+      next(err);
+      return;
+    }
+
+    req.body.password = hash;
+
+    // Ignore specific fields in request
+    delete req.body.updated;
+    delete req.body.created;
+
+    User.create(req.body, function(err, createdUser) {
+      if (err) {
+        next(err);
+        return;
       }
-  	});
-  	
-  }else{
-    user.findOne({username: q}, function(err, user){
-      if (err) res.send(err);
-    	if(user){
-    	  res.send(user)
-    	}else{
-    	  res.send(JSON.stringify('Query field invalid.'));
-    	}
-    })
-  }
-  console.log('GET /users')
+
+      console.log("Created user \"" + createdUser.username + "\"");
+
+      res.send(createdUser.toJSON());
+    });
+  });
 };
 
-exports.updateUser = function(req, res) {
-  /*
-  var userid = req.params.userid;
-  user.findOne({_id: userid}, function(err, user){
-    if(err) res.send(err);
-    res.send(userid);
-  })
- */
-  console.log('PUT /users/:userid');
+exports.list = function(req, res, next) {
+  res.send(405);
 };
-exports.showUser = function(req, res) {
-  userid = req.params.userid;
-  user.findOne({_id: userid}, function(err, users){
-    if(err) res.send(err);
-    if(users){
-      /*
-      responds with
-        - full name
-        - username
-        - created
-        - updated
-      */
-      res.send('{\n' + '"fullName":"'+ users.fullName + '"' + ',\n' + '"username":"'+ users.username + '"' + ',\n' + '"created":"'+ users.created + '"' + ',\n' + '"updated":"'+ users.updated + '"' +'\n}') //modif
-    }else{
-      res.send(JSON.stringify('User not found'))
-    }
-  });
-  console.log('GET /users/:userid');
+
+exports.update = function(req, res, next) {
+  
 };
-exports.deleteUser = function(req, res) {
-  console.log('DELETE /users/:userid');
+
+exports.show = function(req, res, next) {
+  hide = User.schema.options.toJSON.hide.slice();
+
+  if (!false) { // IF NOT CURRENT USER
+    hide.push('email');
+  }
+
+  res.send(req.user.toJSON({ hide: hide, transform: true, getters: true }));
+};
+
+exports.delete = function(req, res, next) {
+  if (true) { // IF CURRENT USER
+    req.user.remove(function(err) {
+      if (err) {
+        next(err);
+        return;
+      }
+
+      res.send();
+    });
+  }
 }; 
   
-exports.passwordReset = function(req, res) {
+exports.passwordReset = function(req, res, next) {
   console.log('POST /users/:userid/reset');
 };
   
-exports.passwordChange = function(req, res) {
+exports.passwordChange = function(req, res, next) {
   console.log('POST /users/:userid/change');
 };
